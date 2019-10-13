@@ -6,9 +6,9 @@ This sample provides a set of instructions to secure an Apigee hybrid installati
 
 This sample uses:
 
-[Apigee hybrid](https://docs.apigee.com/hybrid/beta2/reference-overview), currently in Beta
-[Google Kubernetes Engine](https://cloud.google.com/kubernetes-engine/) to setup/install Apigee hybrid 
-[Project Calico](https://docs.projectcalico.org/v3.5/introduction/) as the CNI plugin
+* [Apigee hybrid](https://docs.apigee.com/hybrid/beta2/reference-overview), currently in Beta
+* [Google Kubernetes Engine](https://cloud.google.com/kubernetes-engine/) to setup/install Apigee hybrid 
+* [Project Calico](https://docs.projectcalico.org/v3.5/introduction/) as the CNI plugin
 
 ## Objective
 
