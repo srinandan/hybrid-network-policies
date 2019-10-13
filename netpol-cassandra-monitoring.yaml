@@ -1,0 +1,22 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: netpol-cassandra-monitor
+  namespace: apigee
+spec:
+  podSelector:
+    matchLabels:
+      app: apigee-cassandra
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+      - namespaceSelector:
+          matchLabels:
+            app: apigee
+      - podSelector:
+          matchLabels:
+            app: apigee-metrics
+      ports:
+      - protocol: TCP
+        port: 7070

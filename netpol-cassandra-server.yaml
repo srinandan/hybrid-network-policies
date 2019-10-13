@@ -1,0 +1,38 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: netpol-cassandra-server
+  namespace: apigee
+spec:
+  podSelector:
+    matchLabels:
+      app: apigee-cassandra
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          app: apigee
+    - podSelector:
+        matchLabels:
+          app: apigee-cassandra
+    ports:
+    - protocol: TCP
+      port: 7000
+    - protocol: TCP
+      port: 7001
+  egress:
+  - to: 
+    - namespaceSelector:
+        matchLabels:
+          app: apigee
+    - podSelector:
+        matchLabels:
+          app: cassandra
+    ports:
+    - protocol: TCP
+      port: 7000
+    - protocol: TCP
+      port: 7001

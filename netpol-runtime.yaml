@@ -1,0 +1,36 @@
+# this policy will allow any egress traffic.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: netpol-runtime
+  namespace: apigee
+spec:
+  podSelector:
+    matchLabels:
+      component: runtime
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          app: apigee
+    - podSelector:
+        matchLabels:
+          app: istio-ingressgateway
+    ports:
+    - protocol: TCP
+      port: 8443
+  egress:
+  - {}
+#  - to:
+#    - namespaceSelector:
+#        matchLabels:
+#          namespace: apigee
+#    - podSelector:
+#        matchLabels:
+#          component: apigee-udca
+#    ports:
+#    - protocol: TCP
+#      port: 20001

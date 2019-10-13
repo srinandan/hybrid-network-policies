@@ -1,0 +1,44 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: netpol-mart
+  namespace: apigee
+spec:
+  podSelector:
+    matchLabels:
+      component: mart
+  policyTypes:
+    - Ingress
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          app: apigee
+    - podSelector:
+        matchLabels:
+          app: apigee-mart-istio-ingressgateway
+    ports:
+    - protocol: TCP
+      port: 8843
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: netpol-mart-authz
+  namespace: apigee
+spec:
+  podSelector:
+    matchLabels:
+      component: mart
+  policyTypes:
+    - Ingress
+  ingress:
+  - from: []
+    ports:
+    - protocol: TCP
+      port: 7091
+  egress:
+    - to: []
+      ports:
+      - protocol: TCP
+        port: 443      

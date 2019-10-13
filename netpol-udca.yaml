@@ -1,0 +1,72 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: netpol-udca
+  namespace: apigee
+spec:
+  podSelector:
+    matchLabels:
+      component: apigee-udca
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+  - from: []
+    ports:
+    - protocol: TCP
+      port: 7091
+    - protocol: TCP
+      port: 7070      
+  egress:
+    - to: []
+      ports:
+      - protocol: TCP
+        port: 443
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: netpol-udca-runtime
+  namespace: apigee
+spec:
+  podSelector:
+    matchLabels:
+      component: apigee-udca
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+  - from: 
+    - namespaceSelector:
+        matchLabels:
+          app: apigee
+    - podSelector:
+        matchLabels:
+          component: runtime  
+    ports:
+    - protocol: TCP
+      port: 20001
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: netpol-udca-token
+  namespace: apigee
+spec:
+  podSelector:
+    matchLabels:
+      component: apigee-udca
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+  - from: 
+    - namespaceSelector:
+        matchLabels:
+          app: apigee
+    - podSelector:
+        matchLabels:
+          component: apigee-udca  
+    ports:
+    - protocol: TCP
+      port: 7090

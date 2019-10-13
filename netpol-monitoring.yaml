@@ -1,0 +1,150 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: netpol-monitoring-cassandra
+  namespace: apigee
+spec:
+  podSelector:
+    matchLabels:
+      app: apigee-metrics
+  policyTypes:
+    - Egress
+    - Ingress
+  ingress:
+  - {}
+  egress:
+    - to: 
+      - namespaceSelector:
+          matchLabels:
+            app: apigee
+      - podSelector:
+          matchLabels:
+            app: apigee-cassandra
+            component: apigee-udca
+      ports:
+      - protocol: TCP
+        port: 7070
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: netpol-monitoring-prometheus-runtime
+  namespace: apigee
+spec:
+  podSelector:
+    matchLabels:
+      app: apigee-metrics
+  policyTypes:
+    - Egress
+    - Ingress
+  ingress:
+  - {}    
+  egress:
+    - to: 
+      - namespaceSelector:
+          matchLabels:
+            app: apigee
+      - podSelector:
+          matchLabels:
+            component: runtime
+      ports:
+      - protocol: TCP
+        port: 8843
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: netpol-monitoring-prometheus-mart
+  namespace: apigee
+spec:
+  podSelector:
+    matchLabels:
+      app: apigee-metrics
+  policyTypes:
+    - Egress
+    - Ingress
+  ingress:
+  - {}    
+  egress:
+    - to: 
+      - namespaceSelector:
+          matchLabels:
+            app: apigee
+      - podSelector:
+          matchLabels:
+            component: mart
+      ports:
+      - protocol: TCP
+        port: 8843
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: netpol-monitoring-prometheus-sync
+  namespace: apigee
+spec:
+  podSelector:
+    matchLabels:
+      app: apigee-metrics
+  policyTypes:
+    - Egress
+    - Ingress
+  ingress:
+  - {}    
+  egress:
+    - to: 
+      - namespaceSelector:
+          matchLabels:
+            app: apigee
+      - podSelector:
+          matchLabels:
+            component: synchronizer
+      ports:
+      - protocol: TCP
+        port: 8843
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: netpol-monitoring-mart
+  namespace: apigee
+spec:
+  podSelector:
+    matchLabels:
+      component: mart
+  policyTypes:
+    - Ingress
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          app: apigee
+    - podSelector:
+        matchLabels:
+          app: apigee-metrics
+    ports:
+    - protocol: TCP
+      port: 8843
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: netpol-monitoring-runtime
+  namespace: apigee
+spec:
+  podSelector:
+    matchLabels:
+      component: runtime
+  policyTypes:
+    - Ingress
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          app: apigee
+    - podSelector:
+        matchLabels:
+          app: apigee-metrics
+    ports:
+    - protocol: TCP
+      port: 8843

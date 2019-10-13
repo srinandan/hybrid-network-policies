@@ -1,0 +1,129 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: netpol-allow-dns-cassandra
+  namespace: apigee
+spec:
+  podSelector:
+    matchLabels:
+      apigee.com/component: cassandra
+  egress:
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          namespace: kube-system          
+    ports:
+    - protocol: UDP
+      port: 53
+  policyTypes:
+  - Egress
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: netpol-allow-dns-runtime
+  namespace: apigee
+spec:
+  podSelector:
+    matchLabels:
+      component: runtime
+  egress:
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          namespace: kube-system    
+    - ipBlock:
+        cidr: 8.8.8.8/32
+    ports:
+    - protocol: UDP
+      port: 53
+  policyTypes:
+  - Egress
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: netpol-allow-dns-mart
+  namespace: apigee
+spec:
+  podSelector:
+    matchLabels:
+      component: mart
+  egress:
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          namespace: kube-system    
+    - ipBlock:
+        cidr: 8.8.8.8/32
+    ports:
+    - protocol: UDP
+      port: 53
+  policyTypes:
+  - Egress
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: netpol-allow-dns-metrics
+  namespace: apigee
+spec:
+  podSelector:
+    matchLabels:
+      component: apigee-metrics
+  egress:
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          namespace: kube-system
+    - ipBlock:
+        cidr: 8.8.8.8/32
+    ports:
+    - protocol: UDP
+      port: 53
+  policyTypes:
+  - Egress
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: netpol-allow-dns-udca
+  namespace: apigee
+spec:
+  podSelector:
+    matchLabels:
+      component: apigee-udca
+  egress:
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          namespace: kube-system
+    - ipBlock:
+        cidr: 8.8.8.8/32
+    ports:
+    - protocol: UDP
+      port: 53
+  policyTypes:
+  - Egress
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: netpol-allow-dns-sync
+  namespace: apigee
+spec:
+  podSelector:
+    matchLabels:
+      component: synchronizer
+  egress:
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          namespace: kube-system
+    - ipBlock:
+        cidr: 8.8.8.8/32
+    ports:
+    - protocol: UDP
+      port: 53
+  policyTypes:
+  - Egress
