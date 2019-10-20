@@ -32,6 +32,7 @@ spec:
       component: mart
   policyTypes:
     - Ingress
+    - Egress
   ingress:
   - from: []
     ports:
