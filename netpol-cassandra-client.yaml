@@ -16,7 +16,7 @@ spec:
           app: apigee
     - podSelector:
         matchLabels:
-          component: runtime
+          app: apigee-runtime
     ports:
     - protocol: TCP
       port: 9042
@@ -41,7 +41,7 @@ spec:
           app: apigee
     - podSelector:
         matchLabels:
-          component: mart
+          app: apigee-mart
     ports:
     - protocol: TCP
       port: 9042

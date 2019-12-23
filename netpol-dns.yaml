@@ -6,7 +6,7 @@ metadata:
 spec:
   podSelector:
     matchLabels:
-      apigee.com/component: cassandra
+      app: apigee-cassandra
   egress:
   - to:
     - namespaceSelector:
@@ -26,7 +26,7 @@ metadata:
 spec:
   podSelector:
     matchLabels:
-      component: runtime
+      app: apigee-runtime
   egress:
   - to:
     - namespaceSelector:
@@ -48,7 +48,7 @@ metadata:
 spec:
   podSelector:
     matchLabels:
-      component: mart
+      app: apigee-mart
   egress:
   - to:
     - namespaceSelector:
@@ -92,7 +92,7 @@ metadata:
 spec:
   podSelector:
     matchLabels:
-      component: apigee-udca
+      app: apigee-udca
   egress:
   - to:
     - namespaceSelector:
@@ -114,7 +114,51 @@ metadata:
 spec:
   podSelector:
     matchLabels:
-      component: synchronizer
+      app: apigee-synchronizer
+  egress:
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          namespace: kube-system
+    - ipBlock:
+        cidr: 8.8.8.8/32
+    ports:
+    - protocol: UDP
+      port: 53
+  policyTypes:
+  - Egress
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: netpol-allow-dns-connect
+  namespace: apigee
+spec:
+  podSelector:
+    matchLabels:
+      app: apigee-connect-agent
+  egress:
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          namespace: kube-system
+    - ipBlock:
+        cidr: 8.8.8.8/32
+    ports:
+    - protocol: UDP
+      port: 53
+  policyTypes:
+  - Egress
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: netpol-allow-dns-ah
+  namespace: apigee
+spec:
+  podSelector:
+    matchLabels:
+      app: apigee-deployment-admissionhook
   egress:
   - to:
     - namespaceSelector:

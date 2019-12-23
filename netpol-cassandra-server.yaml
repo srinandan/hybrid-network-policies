@@ -30,7 +30,7 @@ spec:
           app: apigee
     - podSelector:
         matchLabels:
-          app: cassandra
+          app: apigee-cassandra
     ports:
     - protocol: TCP
       port: 7000

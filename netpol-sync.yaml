@@ -6,7 +6,7 @@ metadata:
 spec:
   podSelector:
     matchLabels:
-      component: synchronizer
+      app: apigee-synchronizer
   policyTypes:
     - Ingress
     - Egress
@@ -29,7 +29,7 @@ metadata:
 spec:
   podSelector:
     matchLabels:
-      component: synchronizer
+      app: apigee-synchronizer
   policyTypes:
     - Ingress
   ingress:
@@ -39,7 +39,30 @@ spec:
           app: apigee
     - podSelector:
         matchLabels:
-          component: runtime
+          app: apigee-runtime
+    ports:
+    - protocol: TCP
+      port: 8843
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: netpol-sync-metrics
+  namespace: apigee
+spec:
+  podSelector:
+    matchLabels:
+      app: apigee-synchronizer
+  policyTypes:
+    - Ingress
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          app: apigee
+    - podSelector:
+        matchLabels:
+          app: apigee-metrics
     ports:
     - protocol: TCP
       port: 8843
