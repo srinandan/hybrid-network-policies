@@ -1,0 +1,38 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: ad
+  namespace: apigee-system
+spec:
+  podSelector:
+    matchLabels:
+      app: apigee-deployment-admissionhook
+  policyTypes:
+    - Ingress
+  ingress:
+  - from: []
+    ports:
+    - protocol: TCP
+      port: 8443
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-dns-ah
+  namespace: apigee-system
+spec:
+  podSelector:
+    matchLabels:
+      app: apigee-deployment-admissionhook
+  egress:
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          namespace: kube-system
+    - ipBlock:
+        cidr: 8.8.8.8/32
+    ports:
+    - protocol: UDP
+      port: 53
+  policyTypes:
+  - Egress

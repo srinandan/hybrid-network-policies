@@ -1,0 +1,12 @@
+resources:
+  - netpol-runtime.yaml
+  - netpol-sync.yaml
+  - netpol-udca.yaml
+
+namespace: apigee
+
+commonLabels:
+  org: srinandans-apigee
+  env: test
+
+namePrefix: netpol-

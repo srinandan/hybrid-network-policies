@@ -1,42 +1,20 @@
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: netpol-mart-ingress
+  name: udca-authz
   namespace: apigee
 spec:
   podSelector:
     matchLabels:
-      app: apigee-mart
+      app: apigee-udca
   policyTypes:
     - Ingress
-  ingress:
-  - from:
-    - namespaceSelector:
-        matchLabels:
-          app: istio-system
-    - podSelector:
-        matchLabels:
-          app: apigee-mart-istio-ingressgateway
-    ports:
-    - protocol: TCP
-      port: 8843
----
-apiVersion: networking.k8s.io/v1
-kind: NetworkPolicy
-metadata:
-  name: netpol-mart-authz
-  namespace: apigee
-spec:
-  podSelector:
-    matchLabels:
-      app: apigee-mart
-  policyTypes:
-    - Ingress
+    - Egress
   ingress:
   - from: []
     ports:
     - protocol: TCP
-      port: 7091
+      port: 7091     
   egress:
     - to: []
       ports:
@@ -46,45 +24,47 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: netpol-mart-connect
+  name: udca-runtime
   namespace: apigee
 spec:
   podSelector:
     matchLabels:
-      app: apigee-mart
+      app: apigee-udca
   policyTypes:
     - Ingress
   ingress:
-  - from:
+  - from: 
     - namespaceSelector:
         matchLabels:
           app: apigee
     - podSelector:
         matchLabels:
-          app: apigee-connect-agent
+          app: apigee-runtime
+          org: srinandans-apigee
+          env: test
     ports:
     - protocol: TCP
-      port: 8843
+      port: 20001
 ---
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: netpol-mart-metrics
+  name: udca-metrics
   namespace: apigee
 spec:
   podSelector:
     matchLabels:
-      app: apigee-mart
+      app: apigee-udca
   policyTypes:
     - Ingress
   ingress:
-  - from:
+  - from: 
     - namespaceSelector:
         matchLabels:
           app: apigee
     - podSelector:
         matchLabels:
-          app: apigee-metrics
+          app: apigee-metrics  
     ports:
     - protocol: TCP
-      port: 8843
+      port: 7070

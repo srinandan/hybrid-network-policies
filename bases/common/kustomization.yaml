@@ -1,0 +1,10 @@
+resources:
+  - netpol-cassandra-monitoring.yaml
+  - netpol-cassandra-client.yaml
+  - netpol-cassandra-server.yaml
+  - netpol-dns.yaml
+  - netpol-monitoring.yaml
+
+namespace: apigee
+
+namePrefix: netpol-

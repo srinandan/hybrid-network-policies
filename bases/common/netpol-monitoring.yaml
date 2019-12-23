@@ -1,7 +1,7 @@
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: netpol-monitoring-cassandra
+  name: monitoring-cassandra
   namespace: apigee
 spec:
   podSelector:
@@ -27,7 +27,7 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: netpol-monitoring-udca
+  name: monitoring-udca
   namespace: apigee
 spec:
   podSelector:
@@ -53,7 +53,7 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: netpol-monitoring-connect
+  name: monitoring-connect
   namespace: apigee
 spec:
   podSelector:
@@ -79,7 +79,7 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: netpol-monitoring-runtime-mart-sync
+  name: monitoring-runtime
   namespace: apigee
 spec:
   podSelector:
@@ -105,7 +105,7 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: netpol-monitoring-prometheus-mart
+  name: monitoring-mart
   namespace: apigee
 spec:
   podSelector:
@@ -131,7 +131,7 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: netpol-monitoring-prometheus-sync
+  name: monitoring-sync
   namespace: apigee
 spec:
   podSelector:
@@ -153,49 +153,3 @@ spec:
       ports:
       - protocol: TCP
         port: 8843
----
-apiVersion: networking.k8s.io/v1
-kind: NetworkPolicy
-metadata:
-  name: netpol-monitoring-mart
-  namespace: apigee
-spec:
-  podSelector:
-    matchLabels:
-      app: apigee-mart
-  policyTypes:
-    - Ingress
-  ingress:
-  - from:
-    - namespaceSelector:
-        matchLabels:
-          app: apigee
-    - podSelector:
-        matchLabels:
-          app: apigee-metrics
-    ports:
-    - protocol: TCP
-      port: 8843
----
-apiVersion: networking.k8s.io/v1
-kind: NetworkPolicy
-metadata:
-  name: netpol-monitoring-runtime
-  namespace: apigee
-spec:
-  podSelector:
-    matchLabels:
-      app: apigee-runtime
-  policyTypes:
-    - Ingress
-  ingress:
-  - from:
-    - namespaceSelector:
-        matchLabels:
-          app: apigee
-    - podSelector:
-        matchLabels:
-          app: apigee-metrics
-    ports:
-    - protocol: TCP
-      port: 8843

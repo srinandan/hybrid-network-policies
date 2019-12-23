@@ -1,0 +1,10 @@
+resources:
+  - netpol-connect.yaml
+  - netpol-mart.yaml
+
+commonLabels:
+  org: srinandans-apigee
+
+namespace: apigee
+
+namePrefix: netpol-

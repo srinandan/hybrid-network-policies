@@ -1,7 +1,7 @@
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: netpol-cassandra-monitor
+  name: cassandra-monitor
   namespace: apigee
 spec:
   podSelector:

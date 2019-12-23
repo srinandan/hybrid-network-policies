@@ -1,22 +1,40 @@
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: netpol-sync
+  name: connect-mart
   namespace: apigee
 spec:
   podSelector:
     matchLabels:
-      app: apigee-synchronizer
+      app : apigee-connect-agent
   policyTypes:
-    - Ingress
     - Egress
-  ingress:
-  - from: []
-    ports:
-    - protocol: TCP
-      port: 7091
   egress:
-    - to: []
+    - to: 
+      - namespaceSelector:
+          matchLabels:
+            app: apigee    
+      - podSelector:
+          matchLabels:
+            app: apigee-mart
+            org: srinandans-apigee  
+      ports:
+      - protocol: TCP
+        port: 8843
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: connect-control-plane
+  namespace: apigee
+spec:
+  podSelector:
+    matchLabels:
+      app : apigee-connect-agent
+  policyTypes:
+    - Egress
+  egress:
+    - to: [] 
       ports:
       - protocol: TCP
         port: 443
@@ -24,35 +42,12 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: netpol-sync-runtime
+  name: connect-metrics
   namespace: apigee
 spec:
   podSelector:
     matchLabels:
-      app: apigee-synchronizer
-  policyTypes:
-    - Ingress
-  ingress:
-  - from:
-    - namespaceSelector:
-        matchLabels:
-          app: apigee
-    - podSelector:
-        matchLabels:
-          app: apigee-runtime
-    ports:
-    - protocol: TCP
-      port: 8843
----
-apiVersion: networking.k8s.io/v1
-kind: NetworkPolicy
-metadata:
-  name: netpol-sync-metrics
-  namespace: apigee
-spec:
-  podSelector:
-    matchLabels:
-      app: apigee-synchronizer
+      app : apigee-connect-agent
   policyTypes:
     - Ingress
   ingress:
@@ -65,4 +60,5 @@ spec:
           app: apigee-metrics
     ports:
     - protocol: TCP
-      port: 8843
+      port: 7070
+

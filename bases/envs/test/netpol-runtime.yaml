@@ -1,12 +1,49 @@
+# this policy will allow any egress traffic.
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: netpol-cassandra-runtime
+  name: runtime
   namespace: apigee
 spec:
   podSelector:
     matchLabels:
-      app: apigee-cassandra
+      app: apigee-runtime
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          app: istio-system
+    - podSelector:
+        matchLabels:
+          app: istio-ingressgateway
+    ports:
+    - protocol: TCP
+      port: 8443
+  egress:
+  - {}
+#  - to:
+#    - namespaceSelector:
+#        matchLabels:
+#          namespace: apigee
+#    - podSelector:
+#        matchLabels:
+#          component: apigee-udca
+#    ports:
+#    - protocol: TCP
+#      port: 20001
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: runtime-metrics
+  namespace: apigee
+spec:
+  podSelector:
+    matchLabels:
+      app: apigee-runtime
   policyTypes:
     - Ingress
   ingress:
@@ -16,35 +53,7 @@ spec:
           app: apigee
     - podSelector:
         matchLabels:
-          app: apigee-runtime
+          app: apigee-metrics
     ports:
     - protocol: TCP
-      port: 9042
-    - protocol: TCP
-      port: 9142
----
-apiVersion: networking.k8s.io/v1
-kind: NetworkPolicy
-metadata:
-  name: netpol-cassandra-mart
-  namespace: apigee
-spec:
-  podSelector:
-    matchLabels:
-      app: apigee-cassandra
-  policyTypes:
-    - Ingress
-  ingress:
-  - from:
-    - namespaceSelector:
-        matchLabels:
-          app: apigee
-    - podSelector:
-        matchLabels:
-          app: apigee-mart
-    ports:
-    - protocol: TCP
-      port: 9042
-    - protocol: TCP
-      port: 9142
----
+      port: 8843

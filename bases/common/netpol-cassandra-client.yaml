@@ -1,68 +1,50 @@
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: netpol-udca-authz
+  name: cassandra-runtime
   namespace: apigee
 spec:
   podSelector:
     matchLabels:
-      app: apigee-udca
-  policyTypes:
-    - Ingress
-    - Egress
-  ingress:
-  - from: []
-    ports:
-    - protocol: TCP
-      port: 7091     
-  egress:
-    - to: []
-      ports:
-      - protocol: TCP
-        port: 443
----
-apiVersion: networking.k8s.io/v1
-kind: NetworkPolicy
-metadata:
-  name: netpol-udca-runtime
-  namespace: apigee
-spec:
-  podSelector:
-    matchLabels:
-      app: apigee-udca
+      app: apigee-cassandra
   policyTypes:
     - Ingress
   ingress:
-  - from: 
+  - from:
     - namespaceSelector:
         matchLabels:
           app: apigee
     - podSelector:
         matchLabels:
-          app: apigee-runtime  
+          app: apigee-runtime
     ports:
     - protocol: TCP
-      port: 20001
+      port: 9042
+    - protocol: TCP
+      port: 9142
 ---
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: netpol-udca-metrics
+  name: cassandra-mart
   namespace: apigee
 spec:
   podSelector:
     matchLabels:
-      app: apigee-udca
+      app: apigee-cassandra
   policyTypes:
     - Ingress
   ingress:
-  - from: 
+  - from:
     - namespaceSelector:
         matchLabels:
           app: apigee
     - podSelector:
         matchLabels:
-          app: apigee-metrics  
+          app: apigee-mart
     ports:
     - protocol: TCP
-      port: 7070
+      port: 9042
+    - protocol: TCP
+      port: 9142
+---

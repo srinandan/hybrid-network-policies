@@ -1,0 +1,6 @@
+resources:
+  - netpol-ah.yaml
+
+namespace: apigee-system
+
+namePrefix: netpol-
