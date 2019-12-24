@@ -1,4 +1,4 @@
-# this policy will allow any egress traffic, ingress only from istio ingress
+# allow ingress to MART only from apigee-mart-istio-ingress
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
