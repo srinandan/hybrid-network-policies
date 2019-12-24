@@ -12,7 +12,7 @@ This sample uses:
 
 ## Objective
 
-Kubernetes network policies allow/control how pods communicate with each other (as well as how/if they can communicate externally/outside the cluster). A Kubernetes cluster can host one or more Apigee orgs and each org can have one or more Apigee environments. The Pods installed by Apigee hybrid are cluster scoped, org scoped or environment scoped.
+Kubernetes network policies allow/control how pods communicate with each other (as well as how/if they can communicate externally/outside the cluster). A Kubernetes cluster can host one or more Apigee orgs and each org can have one or more Apigee environments. Pods installed by Apigee hybrid are cluster scoped, org scoped or environment scoped.
 
 The following components are cluster scoped:
 
@@ -21,7 +21,7 @@ The following components are cluster scoped:
 * apigee-metrics - Apigee Metrics Agent (sends application metrics to Stackdriver)
 * apigee-logger - Apigee Logger Agent (sends applications logs to Stackdriver)
 * istio-ingressgateway - Ingress proxy to all API gateways in the cluster
-* apigee-mart-istio-ingressgateway - - Ingress proxy to all MART applications in the cluster
+* apigee-mart-istio-ingressgateway - Ingress proxy to all MART applications in the cluster; NOTE: When using apigee-connect this component is not necessary.
 
 Apigee Cassandra can host multiple orgs and there can be multiple instances per cluster:
 
@@ -45,9 +45,9 @@ The objective of applying network policies is to restrict which of these pods ca
 This installation assumes:
 
 1. A single Apigee org
-  a. Change the org name in this [kustomization.yaml](./org/kustomization.yaml) file and this [kustomization.yaml](./env/kustomization.yaml)
+  a. Change the org name in this [kustomization.yaml](./bases/org/kustomization.yaml#L9) file.
 2. A single Apigee environment in that org
-  a. Change the org and environment this [kustomization.yaml](./env/kustomization.yaml)
+  a. Change the environment name in this [kustomization.yaml](./bases/orgs/envs/test/kustomization.yaml#L7) file.
 3. The product is installed on default namespaces:
   a. `apigee-system` - for the Apigee deployment controller and admissionhooks
   b. `apigee` - for all Apigee runtime components
@@ -61,7 +61,68 @@ This sample uses [Kustomize](https://kustomize.io/) and tested with v3.5.3. Kust
 
 This sample has been tested with Apigee hybrid 1.1.x. The sample will require changes to work with version 1.0.X.
 
-## Installing the Policy
+## Explanation of policies
+ 
+The following policies allow access to kube DNS and Google DNS:
+
+* [netpol-allow-dns-cassandra](./bases/common/netpol-dns.yaml)
+* [netpol-allow-dns-mart](./bases/common/netpol-dns.yaml)
+* [netpol-allow-dns-runtime](./bases/common/netpol-dns.yaml)
+* [netpol-allow-dns-sync](./bases/common/netpol-dns.yaml)
+* [netpol-allow-dns-udca](./bases/common/netpol-dns.yaml)
+* [netpol-allow-dns-metrics](./bases/common/netpol-dns.yaml)
+
+NOTE: These DNS policies allow each pod access to the internet (Google DNS) with the following stanza:
+
+```yaml
+
+- ipBlock:
+    cidr: 8.8.8.8/32
+```
+
+Remove this block if you don't want a pod to access the internet.
+
+The following policies secure Apigee Cassandra:
+
+* [netpol-cassandra-mart](./bases/common/netpol-cassandra-client.yaml): Allows access from MART to Cassandra
+* [netpol-cassandra-runtime](./bases/common/netpol-cassandra-client.yaml): Allows access from Runtime to Cassandra
+* [netpol-cassandra-server](./bases/common/netpol-cassandra-server.yaml): Allows Cassandra nodes to communicate with each other
+* [netpol-cassandra-monitor](./bases/common/netpol-cassandra-monitoring.yaml): Allow only the metrics pod to scrape metrics
+
+The following policies secure Apigee MART:
+
+* [netpol-mart-ingress](./bases/common/netpol-ingress.yaml): Allows MART to be accessed by mart-istio-ingressgateway only. 
+* [netpol-mart-authz](./bases/netpol-mart.yaml): Allow MART authn-authz to access the internet (apigee.googleapis.com)
+* [netpol-mart-connect](./bases/org/netpol-connect.yaml): Allow Apigee connect access to a MART instance
+* [netpol-mart-metrics](./bases/org/netpol-mart.yaml): Allow only the metrics pod to scrape metrics
+
+The following policies secure Apigee Runtime (Gateway):
+
+* [netpol-runtime-metrics](./bases/org/envs/test/netpol-runtime.yaml): Allow only the metrics pod to scrape metrics
+* [netpol-runtime-ingress](./bases/common/netpol-ingress.yaml): Allows the Apigee runtime to be accessed by istio-ingressgateway only
+
+NOTE: The runtime itself does not have other policies. We cannot predict by default if the gateway accesses services inside the cluster and inside and outside the cluster.
+
+The following policies secure Apigee synchronizer:
+
+* [netpol-sync-authz](./bases/org/envs/test/netpol-sync.yaml): Allow the sync to reach the control plane (apigee.googleapis.com)
+* [netpol-sync-runtime](./bases/org/envs/test/netpol-sync.yaml): Allow only the runtime to access the synchronizer (for proxy bundles etc.)
+* [netpol-sync-metrics](./bases/org/envs/test/netpol-sync.yaml): Allow only the metrics pod to scrape metrics
+
+The following policies secure Apigee UDCA (Analytics Agent):
+
+* [netpol-udca-authz](./bases/org/envs/test/netpol-udca.yaml): Allow UDCA access the control plane to send analytics
+* [netpol-udca-runtime](./bases/org/envs/test/netpol-udca.yaml): Allow the local AX endpoint to be accessed to Runtime only
+* [netpol-udca-token](./bases/org/envs/test/netpol-udca.yaml): Allow UDCA access to the token endpoint
+
+The following policies secure Apigee Metrics/Monitoring:
+
+* [netpol-monitoring-cassandra](./bases/common/netpol-monitoring.yaml): Allow monitoring of Cassandra by the metrics pod
+* [netpol-monitoring-runtime](./bases/common/netpol-monitoring.yaml): Allow monitoring of Runtime by the metrics pod
+* [netpol-monitoring-mart](./bases/common/netpol-monitoring.yaml): Allow monitoring of MART by the metrics pod
+* [netpol-monitoring-sync](./bases/common/netpol-monitoring.yaml): Allow monitoring of Sync by the metrics pod
+
+## Installing the Policies
 
 Step 1: Label namespaces, these will come in handy for match selectors
 
@@ -73,7 +134,13 @@ kubectl label namespace istio-system app=istio-system
 kubectl label namespace kube-system namespace=kube-system
 ```
 
-Step 2: Apply Network policies
+Step 2: Add org name and environment(s)
+
+  a. Update your Apigee org name [here](./bases/org/kustomization.yaml#L9)
+  b. For each environment, create a new folder in `./bases/org/envs` with all the files and change the environment name
+  c. Change the environment name [here](./bases/orgs/envs/test/kustomization.yaml#L7)
+
+Step 3: Apply Network policies
 
 ```bash
 
@@ -134,11 +201,12 @@ netpol-allow-dns-ah   app=apigee-deployment-admissionhook
 
 ### Testing the policies
 
-Step 1: Add a test/sample container with cURL and other network utilities installed
+Step 1: Add a test/sample container with cURL installed
+Step 2: Exec into the pod and access shell `kubectl exec -it {podname} -n {namespace} sh
 
 #### Before Network policies
 
-Step 2: Use cURL to access a pod (even if it is not an http endpoint)
+Step 3: Use cURL to access a pod (even if it is not an http endpoint)
 
 ```bash
 
@@ -162,7 +230,7 @@ You'll notice the connetion goes through (but rejected by the server since it is
 
 #### After Network policies
 
-Step 3: Use cURL again to access a pod
+Step 4: Use cURL again to access a pod
 
 ```bash
 
@@ -174,54 +242,3 @@ Step 3: Use cURL again to access a pod
 ```
 
 The network connection does not complete. Use CTRL+C to terminate cURL.
-
-## Explanation of policies
-
-The following policies allow access to kube DNS and Google DNS:
-
-* [netpol-allow-dns-cassandra](./bases/common/netpol-dns.yaml)
-* [netpol-allow-dns-mart](./bases/common/netpol-dns.yaml)
-* [netpol-allow-dns-runtime](./bases/common/netpol-dns.yaml)
-* [netpol-allow-dns-sync](./bases/common/netpol-dns.yaml)
-* [netpol-allow-dns-udca](./bases/common/netpol-dns.yaml)
-* [netpol-allow-dns-metrics](./bases/common/netpol-dns.yaml)
-
-The following policies secure Apigee Cassandra:
-
-* [netpol-cassandra-mart](./bases/common/netpol-cassandra-client.yaml): Allows access from MART to Cassandra
-* [netpol-cassandra-runtime](./bases/common/netpol-cassandra-client.yaml): Allows access from Runtime to Cassandra
-* [netpol-cassandra-server](./bases/common/netpol-cassandra-server.yaml): Allows Cassandra nodes to communicate with each other
-* [netpol-cassandra-monitor](./bases/common/netpol-cassandra-monitoring.yaml): Allow only the metrics pod to scrape metrics
-
-The following policies secure Apigee MART:
-
-* [netpol-mart-ingress](./bases/common/netpol-ingress.yaml): Allows MART to be accessed by mart-istio-ingressgateway only. 
-* [netpol-mart-authz](./bases/netpol-mart.yaml): Allow MART authn-authz to access the internet (apigee.googleapis.com)
-* [netpol-mart-connect](./bases/org/netpol-mart-connect.yaml): Allow Apigee connect access to a MART instance
-* [netpol-mart-metrics](./bases/env/netpol-sync.yaml): Allow only the metrics pod to scrape metrics
-
-The following policies secure Apigee Runtime (Gateway):
-
-* [netpol-runtime-metrics](./bases/env/netpol-runtime.yaml): Allow only the metrics pod to scrape metrics
-* [netpol-runtime-ingress](./bases/common/netpol-ingress.yaml): Allows the Apigee runtime to be accessed by istio-ingressgateway only
-
-NOTE: The runtime itself does not have other policies. We cannot predict by default if the gateway accesses services inside the cluster and inside and outside the cluster.
-
-The following policies secure Apigee synchronizer:
-
-* [netpol-sync-authz](./bases/env/netpol-sync.yaml): Allow the sync to reach the control plane (apigee.googleapis.com)
-* [netpol-sync-runtime](./bases/env/netpol-sync.yaml): Allow only the runtime to access the synchronizer (for proxy bundles etc.)
-* [netpol-sync-metrics](./bases/env/netpol-sync.yaml): Allow only the metrics pod to scrape metrics
-
-The following policies secure Apigee UDCA (Analytics Agent):
-
-* [netpol-udca-authz](./bases/env/netpol-udca.yaml): Allow UDCA access the control plane to send analytics
-* [netpol-udca-runtime](./bases/env/netpol-udca.yaml): Allow the local AX endpoint to be accessed to Runtime only
-* [netpol-udca-token](./bases/env/netpol-udca.yaml): Allow UDCA access to the token endpoint
-
-The following policies secure Apigee Metrics/Monitoring:
-
-* [netpol-monitoring-cassandra](./bases/common/netpol-monitoring.yaml): Allow monitoring of Cassandra by the metrics pod
-* [netpol-monitoring-runtime](./bases/common/netpol-monitoring.yaml): Allow monitoring of Runtime by the metrics pod
-* [netpol-monitoring-mart](./bases/common/netpol-monitoring.yaml): Allow monitoring of MART by the metrics pod
-* [netpol-monitoring-sync](./bases/common/netpol-monitoring.yaml): Allow monitoring of Sync by the metrics pod
