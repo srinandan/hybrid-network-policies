@@ -53,7 +53,7 @@ This installation assumes:
 
 ## Prequisites
 
-This sample uses [Kustomize](https://kustomize.io/). Kustomize can be used standalone or as part of kubectl (1.14+). Since Apigee hybrid is supported on 1.13.x, this sample will use Kubstomize standalone. 
+This sample uses [Kustomize](https://kustomize.io/) and tested with v3.5.3. Kustomize can be used standalone or as part of kubectl (1.14+). Since Apigee hybrid is supported on 1.13.x, this sample will use Kubstomize standalone. 
 
 ### Apigee hybrid
 
