@@ -16,7 +16,6 @@ spec:
       - podSelector:
           matchLabels:
             app: apigee-mart
-            org: srinandans-apigee  
       ports:
       - protocol: TCP
         port: 8843

@@ -38,8 +38,6 @@ spec:
     - podSelector:
         matchLabels:
           app: apigee-runtime
-          org: srinandans-apigee
-          env: test
     ports:
     - protocol: TCP
       port: 8843
