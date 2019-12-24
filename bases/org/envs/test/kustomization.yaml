@@ -6,7 +6,6 @@ resources:
 namespace: apigee
 
 commonLabels:
-  org: srinandans-apigee
   env: test
 
 namePrefix: netpol-

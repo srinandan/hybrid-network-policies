@@ -1,3 +1,4 @@
 *.txt
 temp.yaml
 sample2
+.DS_Store

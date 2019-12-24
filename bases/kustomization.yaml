@@ -2,4 +2,3 @@ resources:
   - cluster
   - common
   - org
-  - envs
