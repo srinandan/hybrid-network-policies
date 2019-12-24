@@ -153,39 +153,39 @@ The following network policies should be created in the `apigee` namespace
 
 ```bash
 
-NAME                                  POD-SELECTOR                                             AGE
-netpol-allow-dns-cassandra     app=apigee-cassandra
-netpol-allow-dns-connect       app=apigee-connect-agent
-netpol-allow-dns-mart          app=apigee-mart
-netpol-allow-dns-metrics       app=apigee-metrics
-netpol-allow-dns-runtime       app=apigee-runtime
-netpol-allow-dns-sync          app=apigee-synchronizer
-netpol-allow-dns-udca          app=apigee-udca
-netpol-cassandra-mart          app=apigee-cassandra
-netpol-cassandra-monitor       app=apigee-cassandra
-netpol-cassandra-runtime       app=apigee-cassandra
-netpol-cassandra-server        app=apigee-cassandra
-netpol-connect-control-plane   app=apigee-connect-agent,org=srinandans-apigee
-netpol-connect-mart            app=apigee-connect-agent,org=srinandans-apigee
-netpol-connect-metrics         app=apigee-connect-agent,org=srinandans-apigee
-netpol-mart-authz              app=apigee-mart,org=srinandans-apigee
-netpol-mart-connect            app=apigee-mart,org=srinandans-apigee
-netpol-mart-ingress            app=apigee-mart
-netpol-mart-metrics            app=apigee-mart,org=srinandans-apigee
-netpol-monitoring-cassandra    app=apigee-metrics
-netpol-monitoring-connect      app=apigee-metrics
-netpol-monitoring-mart         app=apigee-metrics
-netpol-monitoring-runtime      app=apigee-metrics
-netpol-monitoring-sync         app=apigee-metrics
-netpol-monitoring-udca         app=apigee-metrics
-netpol-runtime-ingress         app=apigee-runtime
-netpol-runtime-metrics         app=apigee-runtime,env=test,org=srinandans-apigee
-netpol-sync-authz              app=apigee-synchronizer,env=test,org=srinandans-apigee
-netpol-sync-metrics            app=apigee-synchronizer,env=test,org=srinandans-apigee
-netpol-sync-runtime            app=apigee-synchronizer,env=test,org=srinandans-apigee
-netpol-udca-authz              app=apigee-udca,env=test,org=srinandans-apigee
-netpol-udca-metrics            app=apigee-udca,env=test,org=srinandans-apigee
-netpol-udca-runtime            app=apigee-udca,env=test,org=srinandans-apigee
+NAME                                 POD-SELECTOR                                             AGE
+netpol-connect-control-plane         app=apigee-connect-agent,org=srinandans-apigee           13s
+netpol-connect-mart                  app=apigee-connect-agent,org=srinandans-apigee           13s
+netpol-connect-metrics               app=apigee-connect-agent,org=srinandans-apigee           13s
+netpol-mart-authz                    app=apigee-mart,org=srinandans-apigee                    12s
+netpol-mart-connect                  app=apigee-mart,org=srinandans-apigee                    12s
+netpol-mart-metrics                  app=apigee-mart,org=srinandans-apigee                    12s
+netpol-netpol-allow-dns-cassandra    app=apigee-cassandra                                     12s
+netpol-netpol-allow-dns-connect      app=apigee-connect-agent                                 12s
+netpol-netpol-allow-dns-mart         app=apigee-mart                                          12s
+netpol-netpol-allow-dns-metrics      app=apigee-metrics                                       12s
+netpol-netpol-allow-dns-runtime      app=apigee-runtime                                       11s
+netpol-netpol-allow-dns-sync         app=apigee-synchronizer                                  11s
+netpol-netpol-allow-dns-udca         app=apigee-udca                                          11s
+netpol-netpol-cassandra-mart         app=apigee-cassandra                                     11s
+netpol-netpol-cassandra-monitor      app=apigee-cassandra                                     11s
+netpol-netpol-cassandra-runtime      app=apigee-cassandra                                     11s
+netpol-netpol-cassandra-server       app=apigee-cassandra                                     10s
+netpol-netpol-mart-ingress           app=apigee-mart                                          10s
+netpol-netpol-monitoring-cassandra   app=apigee-metrics                                       10s
+netpol-netpol-monitoring-connect     app=apigee-metrics                                       10s
+netpol-netpol-monitoring-mart        app=apigee-metrics                                       10s
+netpol-netpol-monitoring-runtime     app=apigee-metrics                                       10s
+netpol-netpol-monitoring-sync        app=apigee-metrics                                       10s
+netpol-netpol-monitoring-udca        app=apigee-metrics                                       9s
+netpol-netpol-runtime-ingress        app=apigee-runtime                                       9s
+netpol-netpol-runtime-metrics        app=apigee-runtime                                       9s
+netpol-sync-authz                    app=apigee-synchronizer,env=test,org=srinandans-apigee   9s
+netpol-sync-metrics                  app=apigee-synchronizer,env=test,org=srinandans-apigee   9s
+netpol-sync-runtime                  app=apigee-synchronizer,env=test,org=srinandans-apigee   9s
+netpol-udca-authz                    app=apigee-udca,env=test,org=srinandans-apigee           9s
+netpol-udca-metrics                  app=apigee-udca,env=test,org=srinandans-apigee           8s
+netpol-udca-runtime                  app=apigee-udca,env=test,org=srinandans-apigee           8s
 ```
 
 NOTE: The org and env names should match your org and env names
