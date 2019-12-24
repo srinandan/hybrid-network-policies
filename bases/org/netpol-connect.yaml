@@ -2,7 +2,6 @@ apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
   name: connect-mart
-  namespace: apigee
 spec:
   podSelector:
     matchLabels:
@@ -26,7 +25,6 @@ apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
   name: connect-control-plane
-  namespace: apigee
 spec:
   podSelector:
     matchLabels:
@@ -43,7 +41,6 @@ apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
   name: connect-metrics
-  namespace: apigee
 spec:
   podSelector:
     matchLabels:

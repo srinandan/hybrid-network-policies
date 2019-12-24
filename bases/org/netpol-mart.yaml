@@ -2,7 +2,6 @@ apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
   name: mart-ingress
-  namespace: apigee
 spec:
   podSelector:
     matchLabels:
@@ -25,7 +24,6 @@ apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
   name: mart-authz
-  namespace: apigee
 spec:
   podSelector:
     matchLabels:
@@ -47,7 +45,6 @@ apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
   name: mart-connect
-  namespace: apigee
 spec:
   podSelector:
     matchLabels:
@@ -71,7 +68,6 @@ apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
   name: mart-metrics
-  namespace: apigee
 spec:
   podSelector:
     matchLabels:

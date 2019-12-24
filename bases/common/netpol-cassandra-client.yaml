@@ -2,7 +2,6 @@ apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
   name: cassandra-runtime
-  namespace: apigee
 spec:
   podSelector:
     matchLabels:
@@ -27,7 +26,6 @@ apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
   name: cassandra-mart
-  namespace: apigee
 spec:
   podSelector:
     matchLabels:

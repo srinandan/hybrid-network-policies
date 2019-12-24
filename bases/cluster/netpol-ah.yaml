@@ -2,7 +2,6 @@ apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
   name: ad
-  namespace: apigee-system
 spec:
   podSelector:
     matchLabels:
@@ -19,7 +18,6 @@ apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
   name: allow-dns-ah
-  namespace: apigee-system
 spec:
   podSelector:
     matchLabels:

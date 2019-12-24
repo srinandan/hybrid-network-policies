@@ -2,7 +2,6 @@ apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
   name: monitoring-cassandra
-  namespace: apigee
 spec:
   podSelector:
     matchLabels:
@@ -28,7 +27,6 @@ apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
   name: monitoring-udca
-  namespace: apigee
 spec:
   podSelector:
     matchLabels:
@@ -54,7 +52,6 @@ apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
   name: monitoring-connect
-  namespace: apigee
 spec:
   podSelector:
     matchLabels:
@@ -80,7 +77,6 @@ apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
   name: monitoring-runtime
-  namespace: apigee
 spec:
   podSelector:
     matchLabels:
@@ -106,7 +102,6 @@ apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
   name: monitoring-mart
-  namespace: apigee
 spec:
   podSelector:
     matchLabels:
@@ -132,7 +127,6 @@ apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
   name: monitoring-sync
-  namespace: apigee
 spec:
   podSelector:
     matchLabels:

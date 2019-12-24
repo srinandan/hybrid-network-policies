@@ -2,7 +2,6 @@ apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
   name: udca-authz
-  namespace: apigee
 spec:
   podSelector:
     matchLabels:
@@ -25,7 +24,6 @@ apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
   name: udca-runtime
-  namespace: apigee
 spec:
   podSelector:
     matchLabels:
@@ -50,7 +48,6 @@ apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
   name: udca-metrics
-  namespace: apigee
 spec:
   podSelector:
     matchLabels:

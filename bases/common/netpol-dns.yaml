@@ -2,7 +2,6 @@ apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
   name: allow-dns-cassandra
-  namespace: apigee
 spec:
   podSelector:
     matchLabels:
@@ -22,7 +21,6 @@ apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
   name: allow-dns-runtime
-  namespace: apigee
 spec:
   podSelector:
     matchLabels:
@@ -44,7 +42,6 @@ apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
   name: allow-dns-mart
-  namespace: apigee
 spec:
   podSelector:
     matchLabels:
@@ -66,7 +63,6 @@ apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
   name: allow-dns-metrics
-  namespace: apigee
 spec:
   podSelector:
     matchLabels:
@@ -88,7 +84,6 @@ apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
   name: allow-dns-udca
-  namespace: apigee
 spec:
   podSelector:
     matchLabels:
@@ -110,7 +105,6 @@ apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
   name: allow-dns-sync
-  namespace: apigee
 spec:
   podSelector:
     matchLabels:
@@ -132,7 +126,6 @@ apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
   name: allow-dns-connect
-  namespace: apigee
 spec:
   podSelector:
     matchLabels:
