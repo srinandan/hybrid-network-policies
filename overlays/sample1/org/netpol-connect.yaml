@@ -1,0 +1,60 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: connect-mart
+spec:
+  podSelector:
+    matchLabels:
+      app : apigee-connect-agent
+  policyTypes:
+    - Egress
+  egress:
+    - to: 
+      - namespaceSelector:
+          matchLabels:
+            app: apigee    
+      - podSelector:
+          matchLabels:
+            app: apigee-mart
+      ports:
+      - protocol: TCP
+        port: 8843
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: connect-control-plane
+spec:
+  podSelector:
+    matchLabels:
+      app : apigee-connect-agent
+  policyTypes:
+    - Egress
+  egress:
+    - to: [] 
+      ports:
+      - protocol: TCP
+        port: 443
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: connect-metrics
+spec:
+  podSelector:
+    matchLabels:
+      app : apigee-connect-agent
+  policyTypes:
+    - Ingress
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          app: apigee
+    - podSelector:
+        matchLabels:
+          app: apigee-metrics
+    ports:
+    - protocol: TCP
+      port: 7070
+

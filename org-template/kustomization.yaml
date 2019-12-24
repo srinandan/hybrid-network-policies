@@ -1,0 +1,9 @@
+resources:
+  - netpol-connect.yaml
+  - netpol-mart.yaml
+  - envs
+
+commonLabels:
+  org: ORG_NAME
+
+namespace: apigee

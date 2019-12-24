@@ -1,0 +1,65 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: sync-authz
+spec:
+  podSelector:
+    matchLabels:
+      app: apigee-synchronizer
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+  - from: []
+    ports:
+    - protocol: TCP
+      port: 7091
+  egress:
+    - to: []
+      ports:
+      - protocol: TCP
+        port: 443
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: sync-runtime
+spec:
+  podSelector:
+    matchLabels:
+      app: apigee-synchronizer
+  policyTypes:
+    - Ingress
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          app: apigee
+    - podSelector:
+        matchLabels:
+          app: apigee-runtime
+    ports:
+    - protocol: TCP
+      port: 8843
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: sync-metrics
+spec:
+  podSelector:
+    matchLabels:
+      app: apigee-synchronizer
+  policyTypes:
+    - Ingress
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          app: apigee
+    - podSelector:
+        matchLabels:
+          app: apigee-metrics
+    ports:
+    - protocol: TCP
+      port: 8843

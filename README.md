@@ -45,9 +45,9 @@ The objective of applying network policies is to restrict which of these pods ca
 This installation assumes:
 
 1. A single Apigee org
-  a. Change the org name in this [kustomization.yaml](./base/org/kustomization.yaml#L9) file.
+  a. Change the org name in this [kustomization.yaml](./overlays/sample1/org/kustomization.yaml#L7) file.
 2. A single Apigee environment in that org
-  a. Change the environment name in this [kustomization.yaml](./base/orgs/envs/test/kustomization.yaml#L7) file.
+  a. Change the environment name in this [kustomization.yaml](./overlays/sample1/org/envs/test/kustomization.yaml#L7) file.
 3. The product is installed on default namespaces:
   a. `apigee-system` - for the Apigee deployment controller and admissionhooks
   b. `apigee` - for all Apigee runtime components
@@ -93,27 +93,27 @@ The following policies secure Apigee MART:
 
 * [netpol-mart-ingress](./base/common/netpol-ingress.yaml): Allows MART to be accessed by mart-istio-ingressgateway only. 
 * [netpol-mart-authz](./base/netpol-mart.yaml): Allow MART authn-authz to access the internet (apigee.googleapis.com)
-* [netpol-mart-connect](./base/org/netpol-connect.yaml): Allow Apigee connect access to a MART instance
-* [netpol-mart-metrics](./base/org/netpol-mart.yaml): Allow only the metrics pod to scrape metrics
+* [netpol-mart-connect](./overlays/sample1/org/netpol-connect.yaml): Allow Apigee connect access to a MART instance
+* [netpol-mart-metrics](./overlays/sample1/org/netpol-mart.yaml): Allow only the metrics pod to scrape metrics
 
 The following policies secure Apigee Runtime (Gateway):
 
-* [netpol-runtime-metrics](./base/org/envs/test/netpol-runtime.yaml): Allow only the metrics pod to scrape metrics
+* [netpol-runtime-metrics](./base/common/netpol-runtime.yaml): Allow only the metrics pod to scrape metrics
 * [netpol-runtime-ingress](./base/common/netpol-ingress.yaml): Allows the Apigee runtime to be accessed by istio-ingressgateway only
 
 NOTE: The runtime itself does not have other policies. We cannot predict by default if the gateway accesses services inside the cluster and inside and outside the cluster.
 
 The following policies secure Apigee synchronizer:
 
-* [netpol-sync-authz](./base/org/envs/test/netpol-sync.yaml): Allow the sync to reach the control plane (apigee.googleapis.com)
-* [netpol-sync-runtime](./base/org/envs/test/netpol-sync.yaml): Allow only the runtime to access the synchronizer (for proxy bundles etc.)
-* [netpol-sync-metrics](./base/org/envs/test/netpol-sync.yaml): Allow only the metrics pod to scrape metrics
+* [netpol-sync-authz](./overlays/sample1/org/envs/test/netpol-sync.yaml): Allow the sync to reach the control plane (apigee.googleapis.com)
+* [netpol-sync-runtime](./overlays/sample1/org/envs/test/netpol-sync.yaml): Allow only the runtime to access the synchronizer (for proxy bundles etc.)
+* [netpol-sync-metrics](./overlays/sample1/org/envs/test/netpol-sync.yaml): Allow only the metrics pod to scrape metrics
 
 The following policies secure Apigee UDCA (Analytics Agent):
 
-* [netpol-udca-authz](./base/org/envs/test/netpol-udca.yaml): Allow UDCA access the control plane to send analytics
-* [netpol-udca-runtime](./base/org/envs/test/netpol-udca.yaml): Allow the local AX endpoint to be accessed to Runtime only
-* [netpol-udca-token](./base/org/envs/test/netpol-udca.yaml): Allow UDCA access to the token endpoint
+* [netpol-udca-authz](./overlays/sample1/org/envs/test/netpol-udca.yaml): Allow UDCA access the control plane to send analytics
+* [netpol-udca-runtime](./overlays/sample1/org/envs/test/netpol-udca.yaml): Allow the local AX endpoint to be accessed to Runtime only
+* [netpol-udca-token](./overlays/sample1/org/envs/test/netpol-udca.yaml): Allow UDCA access to the token endpoint
 
 The following policies secure Apigee Metrics/Monitoring:
 
@@ -136,9 +136,9 @@ kubectl label namespace kube-system namespace=kube-system
 
 Step 2: Add org name and environment(s)
 
-  a. Update your Apigee org name [here](./base/org/kustomization.yaml#L9)
-  b. For each environment, create a new folder in `./base/org/envs` with all the files and change the environment name
-  c. Change the environment name [here](./base/orgs/envs/test/kustomization.yaml#L7)
+  a. Update your Apigee org name [here](./overlays/sample1/org/kustomization.yaml#L7)
+  b. For each environment, create a new folder in `./overlays/org/envs` with all the files and change the environment name
+  c. Change the environment name [here](./overlays/sample1/orgs/envs/test/kustomization.yaml#L7)
 
 Step 3: Apply Network policies
 

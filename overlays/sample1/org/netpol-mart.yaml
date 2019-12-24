@@ -1,0 +1,64 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: mart-authz
+spec:
+  podSelector:
+    matchLabels:
+      app: apigee-mart
+  policyTypes:
+    - Ingress
+  ingress:
+  - from: []
+    ports:
+    - protocol: TCP
+      port: 7091
+  egress:
+    - to: []
+      ports:
+      - protocol: TCP
+        port: 443
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: mart-connect
+spec:
+  podSelector:
+    matchLabels:
+      app: apigee-mart
+  policyTypes:
+    - Ingress
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          app: apigee
+    - podSelector:
+        matchLabels:
+          app: apigee-connect-agent
+    ports:
+    - protocol: TCP
+      port: 8843
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: mart-metrics
+spec:
+  podSelector:
+    matchLabels:
+      app: apigee-mart
+  policyTypes:
+    - Ingress
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          app: apigee
+    - podSelector:
+        matchLabels:
+          app: apigee-metrics
+    ports:
+    - protocol: TCP
+      port: 8843

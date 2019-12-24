@@ -1,0 +1,7 @@
+resources:
+  - netpol-runtime.yaml
+  - netpol-sync.yaml
+  - netpol-udca.yaml
+
+commonLabels:
+  env: ENV_NAME
