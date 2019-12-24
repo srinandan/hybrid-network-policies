@@ -7,5 +7,3 @@ resources:
   - netpol-ingress.yaml
 
 namespace: apigee
-
-namePrefix: netpol-

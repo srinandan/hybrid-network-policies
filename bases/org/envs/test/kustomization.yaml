@@ -3,9 +3,5 @@ resources:
   - netpol-sync.yaml
   - netpol-udca.yaml
 
-namespace: apigee
-
 commonLabels:
   env: test
-
-namePrefix: netpol-

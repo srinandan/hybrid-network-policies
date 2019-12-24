@@ -7,5 +7,3 @@ commonLabels:
   org: srinandans-apigee
 
 namespace: apigee
-
-namePrefix: netpol-

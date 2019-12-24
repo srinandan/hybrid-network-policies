@@ -2,3 +2,5 @@ resources:
   - cluster
   - common
   - org
+
+namePrefix: netpol-
