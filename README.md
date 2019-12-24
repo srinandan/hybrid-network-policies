@@ -20,6 +20,8 @@ The following components are cluster scoped:
 * apigee-deployment-controller - Custom controller that creates and updates Kubernetes and Istio resources
 * apigee-metrics - Apigee Metrics Agent (sends application metrics to Stackdriver)
 * apigee-logger - Apigee Logger Agent (sends applications logs to Stackdriver)
+* istio-ingressgateway - Ingress proxy to all API gateways in the cluster
+* apigee-mart-istio-ingressgateway - - Ingress proxy to all MART applications in the cluster
 
 Apigee Cassandra can host multiple orgs and there can be multiple instances per cluster:
 
@@ -85,38 +87,38 @@ The following network policies should be created in the `apigee` namespace
 ```bash
 
 NAME                                  POD-SELECTOR                                             AGE
-netpol-allow-dns-cassandra     app=apigee-cassandra
-netpol-allow-dns-connect       app=apigee-connect-agent
-netpol-allow-dns-mart          app=apigee-mart
-netpol-allow-dns-metrics       app=apigee-metrics
-netpol-allow-dns-runtime       app=apigee-runtime
-netpol-allow-dns-sync          app=apigee-synchronizer
-netpol-allow-dns-udca          app=apigee-udca
-netpol-cassandra-mart          app=apigee-cassandra
-netpol-cassandra-monitor       app=apigee-cassandra
-netpol-cassandra-runtime       app=apigee-cassandra
-netpol-cassandra-server        app=apigee-cassandra
-netpol-connect-control-plane   app=apigee-connect-agent,org=srinandans-apigee
-netpol-connect-mart            app=apigee-connect-agent,org=srinandans-apigee
-netpol-connect-metrics         app=apigee-connect-agent,org=srinandans-apigee
-netpol-mart-authz              app=apigee-mart,org=srinandans-apigee
-netpol-mart-connect            app=apigee-mart,org=srinandans-apigee
-netpol-mart-ingress            app=apigee-mart,org=srinandans-apigee
-netpol-mart-metrics            app=apigee-mart,org=srinandans-apigee
-netpol-monitoring-cassandra    app=apigee-metrics
-netpol-monitoring-connect      app=apigee-metrics
-netpol-monitoring-mart         app=apigee-metrics
-netpol-monitoring-runtime      app=apigee-metrics
-netpol-monitoring-sync         app=apigee-metrics
-netpol-monitoring-udca         app=apigee-metrics
-netpol-runtime                 app=apigee-runtime,env=test,org=srinandans-apigee
-netpol-runtime-metrics         app=apigee-runtime,env=test,org=srinandans-apigee
-netpol-sync                    app=apigee-synchronizer,env=test,org=srinandans-apigee
-netpol-sync-metrics            app=apigee-synchronizer,env=test,org=srinandans-apigee
-netpol-sync-runtime            app=apigee-synchronizer,env=test,org=srinandans-apigee
-netpol-udca-authz              app=apigee-udca,env=test,org=srinandans-apigee
-netpol-udca-metrics            app=apigee-udca,env=test,org=srinandans-apigee
-netpol-udca-runtime            app=apigee-udca,env=test,org=srinandans-apigee
+netpol-allow-dns-cassandra      app=apigee-cassandra
+netpol-allow-dns-connect        app=apigee-connect-agent
+netpol-allow-dns-mart           app=apigee-mart
+netpol-allow-dns-metrics        app=apigee-metrics
+netpol-allow-dns-runtime        app=apigee-runtime
+netpol-allow-dns-sync           app=apigee-synchronizer
+netpol-allow-dns-udca           app=apigee-udca
+netpol-cassandra-mart           app=apigee-cassandra
+netpol-cassandra-monitor        app=apigee-cassandra
+netpol-cassandra-runtime        app=apigee-cassandra
+netpol-cassandra-server         app=apigee-cassandra
+netpol-connect-control-plane    app=apigee-connect-agent,org=srinandans-apigee
+netpol-connect-mart             app=apigee-connect-agent,org=srinandans-apigee
+netpol-connect-metrics          app=apigee-connect-agent,org=srinandans-apigee
+netpol-mart-authz               app=apigee-mart,org=srinandans-apigee
+netpol-mart-connect             app=apigee-mart,org=srinandans-apigee
+netpol-mart-ingress             app=apigee-mart
+netpol-mart-metrics             app=apigee-mart,org=srinandans-apigee
+netpol-monitoring-cassandra     app=apigee-metrics
+netpol-monitoring-connect       app=apigee-metrics
+netpol-monitoring-mart          app=apigee-metrics
+netpol-monitoring-runtime       app=apigee-metrics
+netpol-monitoring-sync          app=apigee-metrics
+netpol-monitoring-udca          app=apigee-metrics
+netpol-netpol-runtime-metrics   app=apigee-runtime,env=test,org=srinandans-apigee
+netpol-netpol-sync-authz        app=apigee-synchronizer,env=test,org=srinandans-apigee
+netpol-netpol-sync-metrics      app=apigee-synchronizer,env=test,org=srinandans-apigee
+netpol-netpol-sync-runtime      app=apigee-synchronizer,env=test,org=srinandans-apigee
+netpol-netpol-udca-authz        app=apigee-udca,env=test,org=srinandans-apigee
+netpol-netpol-udca-metrics      app=apigee-udca,env=test,org=srinandans-apigee
+netpol-netpol-udca-runtime      app=apigee-udca,env=test,org=srinandans-apigee
+netpol-runtime-ingress          app=apigee-runtime
 ```
 
 NOTE: The org and env names should match your org and env names
@@ -193,7 +195,7 @@ The following policies secure Apigee Cassandra:
 
 The following policies secure Apigee MART:
 
-* [netpol-mart-ingress](./bases/org/netpol-mart.yaml): Allows MART to be accessed by mart-istio-ingressgateway only. 
+* [netpol-mart-ingress](./bases/common/netpol-ingress.yaml): Allows MART to be accessed by mart-istio-ingressgateway only. 
 * [netpol-mart-authz](./bases/netpol-mart.yaml): Allow MART authn-authz to access the internet (apigee.googleapis.com)
 * [netpol-mart-connect](./bases/org/netpol-mart-connect.yaml): Allow Apigee connect access to a MART instance
 * [netpol-mart-metrics](./bases/env/netpol-sync.yaml): Allow only the metrics pod to scrape metrics
@@ -201,13 +203,13 @@ The following policies secure Apigee MART:
 The following policies secure Apigee Runtime (Gateway):
 
 * [netpol-runtime-metrics](./bases/env/netpol-runtime.yaml): Allow only the metrics pod to scrape metrics
-* [netpol-runtime](./bases/env/netpol-runtime.yaml): Allows the Apigee runtime to be accessed by istio-ingressgateway only
+* [netpol-runtime-ingress](./bases/common/netpol-ingress.yaml): Allows the Apigee runtime to be accessed by istio-ingressgateway only
 
 NOTE: The runtime itself does not have other policies. We cannot predict by default if the gateway accesses services inside the cluster and inside and outside the cluster.
 
 The following policies secure Apigee synchronizer:
 
-* [netpol-sync](./bases/env/netpol-sync.yaml): Allow the sync to reach the control plane (apigee.googleapis.com)
+* [netpol-sync-authz](./bases/env/netpol-sync.yaml): Allow the sync to reach the control plane (apigee.googleapis.com)
 * [netpol-sync-runtime](./bases/env/netpol-sync.yaml): Allow only the runtime to access the synchronizer (for proxy bundles etc.)
 * [netpol-sync-metrics](./bases/env/netpol-sync.yaml): Allow only the metrics pod to scrape metrics
 

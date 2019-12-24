@@ -1,29 +1,3 @@
-# this policy will allow any egress traffic.
-apiVersion: networking.k8s.io/v1
-kind: NetworkPolicy
-metadata:
-  name: runtime
-spec:
-  podSelector:
-    matchLabels:
-      app: apigee-runtime
-  policyTypes:
-    - Ingress
-    - Egress
-  ingress:
-  - from:
-    - namespaceSelector:
-        matchLabels:
-          app: istio-system
-    - podSelector:
-        matchLabels:
-          app: istio-ingressgateway
-    ports:
-    - protocol: TCP
-      port: 8443
-  egress:
-  - {}
----
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:

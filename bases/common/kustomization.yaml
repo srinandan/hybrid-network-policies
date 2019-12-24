@@ -4,6 +4,7 @@ resources:
   - netpol-cassandra-server.yaml
   - netpol-dns.yaml
   - netpol-monitoring.yaml
+  - netpol-ingress.yaml
 
 namespace: apigee
 
