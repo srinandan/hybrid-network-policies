@@ -183,7 +183,7 @@ The following policies allow access to kube DNS and Google DNS:
 * [netpol-allow-dns-mart](./bases/common/netpol-dns.yaml)
 * [netpol-allow-dns-runtime](./bases/common/netpol-dns.yaml)
 * [netpol-allow-dns-sync](./bases/common/netpol-dns.yaml)
-* [netpol-allow-dns-udcs](./bases/common/netpol-dns.yaml)
+* [netpol-allow-dns-udca](./bases/common/netpol-dns.yaml)
 * [netpol-allow-dns-metrics](./bases/common/netpol-dns.yaml)
 
 The following policies secure Apigee Cassandra:
