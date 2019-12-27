@@ -62,3 +62,25 @@ spec:
     ports:
     - protocol: TCP
       port: 8843
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: mart-cassandra
+spec:
+  podSelector:
+    matchLabels:
+      app: apigee-mart
+  policyTypes:
+    - Egress
+  egress:
+    - to: 
+      - namespaceSelector:
+          matchLabels:
+            app: apigee
+      - podSelector:
+          matchLabels:
+            app: apigee-cassandra    
+      ports:
+      - protocol: TCP
+        port: 9042
